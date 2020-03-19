@@ -1,0 +1,78 @@
+﻿@model IEnumerable<MVC.Models.EmployeeViewModel>
+
+@{
+    // Layout = null;
+    ViewBag.Title = "Index";
+}
+<br />
+<head>
+    <link href="~/Content/alertifyjs/alertify.min.css" rel="stylesheet" />
+    <link href="~/Content/alertifyjs/themes/default.min.css" rel="stylesheet" />
+</head>
+<p>
+    <a href="@Url.Action("AddOrEdit","Employee")" class="btn btn-default"><i class="fa fa-plus"></i> Create New</a>
+</p>
+<fieldset>
+    <legend>Employees</legend>
+    <table class="table table-striped">
+        <thead class="table-heading">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.ID)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.EmpName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Gender)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Salary)
+                </th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+
+        @foreach (var item in Model)
+    {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.ID)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.EmpName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Gender)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Salary)
+        </td>
+        <td>
+            <a href="@Url.Action("AddOrEdit", "Employee", new { id = item.ID})" class="btn btn-default"><i class="fa fa-pencil"></i>  Edit</a>
+            <a onclick="Delete(@item.ID)" class="btn btn-default"><i class="fa fa-trash"></i>  Delete</a>
+        </td>
+    </tr>
+    }
+
+    </table>
+
+</fieldset>
+    @section scripts{
+        <script src="~/Scripts/alertify.min.js"></script>
+
+        <script>
+
+        $(function () {
+            var successMessage = '@TempData["SuccessMessage"]'
+            if (successMessage != '')
+                alertify.success(successMessage);
+        });
+
+        function Delete(id) {
+            alertify.confirm('Delete !','Are You Sure to Delete this Record ?',function(){
+                window.location.href  = '@Url.Action("Delete","Employee")/'+id;
+            },null );
+        }
+        </script>
+    }
